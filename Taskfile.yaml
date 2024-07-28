@@ -1,0 +1,12 @@
+version: 3
+silent: true
+tasks:
+  default: task --list-all
+  frontend:generate: wails generate module
+  frontend:build:
+    dir: frontend
+    cmd: yarn build
+  dev:
+    - task: frontend:generate
+    - task: frontend:build
+    - wails dev -skipbindings -s -noreload

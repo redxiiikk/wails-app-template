@@ -1,0 +1,14 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "wails-app-template",
+  "outputfilename": "wails-app",
+  "frontend:install": "yarn install",
+  "frontend:build": "yarn run build",
+  "frontend:dev:watcher": "yarn run dev",
+  "frontend:dev:serverUrl": "auto",
+  "wailsjsdir": "frontend/src",
+  "author": {
+    "name": "redxiiikk",
+    "email": "72877527+redxiiikk@users.noreply.github.com"
+  }
+}
