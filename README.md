@@ -17,7 +17,7 @@ This is a template for creating a new Wails application, and integrate some usef
 
 - Frontend
     - [Vue.js](https://vuejs.org/): The progressive javascript framework.
-    - [Primevue](https://primevue.org/): Next generation vue ui component library.
+    - [PrimeVue](https://primevue.org/): Next generation vue ui component library.
     - [Tailwindcss](https://tailwindcss.com/): A utility-first CSS framework for rapidly building custom designs.
 
 ## Roadmap
