@@ -18,21 +18,24 @@ func main() {
 	if err != nil {
 		utils.Logger.Error("start application failed", zap.String("errorMessage", err.Error()))
 	}
-	app.Run(wailsRun)
+	app.Run(wailsRun(app))
 }
 
-func wailsRun(bind ...interface{}) {
-	utils.Logger.Info("[App] Wails Start Run...")
-	err := wails.Run(&options.App{
-		Title:      "kjl-app",
-		Fullscreen: true,
-		AssetServer: &assetserver.Options{
-			Assets: assets,
-		},
-		Bind: bind,
-	})
+func wailsRun(app *backend.App) func(bind ...interface{}) {
+	return func(bind ...interface{}) {
+		utils.Logger.Info("[App] Wails Start Run...")
+		err := wails.Run(&options.App{
+			Title:      app.Name,
+			Fullscreen: true,
+			AssetServer: &assetserver.Options{
+				Assets: assets,
+			},
+			Bind: bind,
+		})
 
-	if err != nil {
-		println("Error:", err.Error())
+		if err != nil {
+			println("Error:", err.Error())
+		}
 	}
+
 }

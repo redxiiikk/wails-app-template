@@ -7,6 +7,7 @@ import (
 )
 
 type App struct {
+	Name        string
 	diContainer *dig.Container
 }
 
@@ -17,6 +18,7 @@ func NewApp() (*App, error) {
 	}
 
 	return &App{
+		Name:        "wails-app-template",
 		diContainer: fxApp,
 	}, nil
 }

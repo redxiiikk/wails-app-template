@@ -21,7 +21,7 @@ type ApplicationConfig struct {
 	Env Env
 }
 
-func NewApplicationConfig() (ApplicationConfig, error) {
+func NewApplicationConfig(appName string) (ApplicationConfig, error) {
 	applicationConfig, err := parseApplicationConfig()
 	if err != nil {
 		return applicationConfig, err
@@ -63,10 +63,10 @@ func applicationConfigFilePath() (string, error) {
 	applicationConfigPath := ""
 
 	switch CurrentEnv {
-	case "dev":
-		applicationConfigPath = path.Join(userConfigDir, "kjl-dev", "config.yaml")
-	case "prod":
-		applicationConfigPath = path.Join(userConfigDir, "kjl", "config.yaml")
+	case DevEnv:
+		applicationConfigPath = path.Join(userConfigDir, "wails-app-template-dev", "config.yaml")
+	case ProdEnv:
+		applicationConfigPath = path.Join(userConfigDir, "wails-app-template", "config.yaml")
 	default:
 		return "", errors.New("didn't known env: env=" + string(CurrentEnv))
 	}
