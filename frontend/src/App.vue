@@ -22,7 +22,10 @@ const navMenus = ref(
 <template>
   <main class="grid grid-cols-8 h-screen">
     <nav>
-      <Menus :model="navMenus" class="h-screen" />
+      <Menus
+        :model="navMenus"
+        class="h-screen"
+      />
     </nav>
     <main class="col-span-7 pl-2">
       <section>

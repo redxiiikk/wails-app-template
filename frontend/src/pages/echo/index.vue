@@ -16,10 +16,18 @@ const echo = () => {
 
 <template>
   <div class="space-y-8">
-    <h1 class="text-3xl">Echo Page</h1>
+    <h1 class="text-3xl">
+      Echo Page
+    </h1>
     <div class="!space-x-4">
-      <InputText v-model="message" type="text" />
-      <Button label="Echo" @click="echo" />
+      <InputText
+        v-model="message"
+        type="text"
+      />
+      <Button
+        label="Echo"
+        @click="echo"
+      />
     </div>
     <div>
       <p>{{ echoMessage }}</p>
