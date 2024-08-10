@@ -1,10 +1,11 @@
 import { Component } from 'vue';
 
-interface Menus {
+export interface Menus {
   name: string;
   path: string;
-  component: () => Promise<Component>;
+  component?: () => Promise<Component>;
   icon?: string;
+  items?: Menus[];
 }
 
 export default [
@@ -19,5 +20,18 @@ export default [
     path: '/echo',
     component: () => import('../pages/echo/index.vue'),
     icon: 'pi pi-wrench',
+  },
+  {
+    name: 'Setting',
+    path: '/setting',
+    icon: 'pi pi-cog',
+    items: [
+      {
+        name: 'Profile',
+        path: '/profile',
+        icon: 'pi pi-cog',
+        component: () => import('../pages/profile/index.vue'),
+      },
+    ],
   },
 ] as Array<Menus>;
