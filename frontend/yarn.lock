@@ -217,6 +217,11 @@
     "@vue/compiler-dom" "3.4.37"
     "@vue/shared" "3.4.37"
 
+"@vue/devtools-api@^6.6.3":
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.6.3.tgz#b23a588154cba8986bba82b6e1d0248bde3fd1a0"
+  integrity sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==
+
 "@vue/language-core@1.8.27":
   version "1.8.27"
   resolved "https://registry.yarnpkg.com/@vue/language-core/-/language-core-1.8.27.tgz#2ca6892cb524e024a44e554e4c55d7a23e72263f"
@@ -938,6 +943,11 @@ postcss@^8.4.18, postcss@^8.4.23, postcss@^8.4.40, postcss@^8.4.41:
     picocolors "^1.0.1"
     source-map-js "^1.2.0"
 
+primeicons@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/primeicons/-/primeicons-7.0.0.tgz#6b25c3fdcb29bb745a3035bdc1ed5902f4a419cf"
+  integrity sha512-jK3Et9UzwzTsd6tzl2RmwrVY/b8raJ3QZLzoDACj+oTJ0oX7L9Hy+XnVwgo4QVKlKpnP/Ur13SXV/pVh4LzaDw==
+
 primevue@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/primevue/-/primevue-4.0.4.tgz#23d93efbb71ba04d99a03dbe86d5c3773fb51f69"
@@ -1181,6 +1191,13 @@ vite@^3.0.7:
     rollup "^2.79.1"
   optionalDependencies:
     fsevents "~2.3.2"
+
+vue-router@4:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.4.3.tgz#58a39dc804632bfb6d26f052aa8f6718bd130299"
+  integrity sha512-sv6wmNKx2j3aqJQDMxLFzs/u/mjA9Z5LCgy6BE0f7yFWMjrPLnS/sPNn8ARY/FXw6byV18EFutn5lTO6+UsV5A==
+  dependencies:
+    "@vue/devtools-api" "^6.6.3"
 
 vue-template-compiler@^2.7.14:
   version "2.7.16"
