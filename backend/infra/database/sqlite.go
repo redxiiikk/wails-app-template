@@ -1,17 +1,20 @@
 package database
 
 import (
+	"crypto/sha256"
 	"embed"
+	"encoding/hex"
 	"github.com/glebarez/sqlite"
 	"github.com/redxiiikk/wails-app-template/backend/config"
 	"github.com/redxiiikk/wails-app-template/backend/utils"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"path/filepath"
 )
 
-//go:embed schema.sql
-var schema embed.FS
+//go:embed all:sql
+var sqlScriptDir embed.FS
 
 //goland:noinspection GoNameStartsWithPackageName
 type SqliteClient struct {
@@ -23,12 +26,14 @@ func NewDatabaseClient(config *config.ApplicationConfig) (*SqliteClient, error) 
 	databaseFilePath := filepath.Join(config.DataDir, "sqlite3.db")
 
 	utils.Logger.Info("[Database] register sqlite", zap.String("databaseFilePath", databaseFilePath))
-	db, err := gorm.Open(sqlite.Open(databaseFilePath), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(databaseFilePath), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	err = initDatabase(db)
+	err = startMigrate(db)
 	if err != nil {
 		return nil, err
 	}
@@ -38,23 +43,6 @@ func NewDatabaseClient(config *config.ApplicationConfig) (*SqliteClient, error) 
 	}, err
 }
 
-func initDatabase(db *gorm.DB) error {
-	utils.Logger.Info("[Database] init database schema")
-	bytes, err := schema.ReadFile("schema.sql")
-	if err != nil {
-		return err
-	}
-
-	err = db.Connection(func(tx *gorm.DB) error {
-		tx.Exec(string(bytes))
-		return tx.Error
-	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func (database *SqliteClient) HealthCheck() (string, error) {
 	tx := database.client.Exec("SELECT 1")
 	if tx.Error != nil {
@@ -62,4 +50,10 @@ func (database *SqliteClient) HealthCheck() (string, error) {
 	}
 
 	return "UP", nil
+}
+
+func hashCode(input string) string {
+	hash := sha256.New()
+	hash.Write([]byte(input))
+	return hex.EncodeToString(hash.Sum(nil))
 }
