@@ -27,8 +27,8 @@ func NewApp() (*App, error) {
 
 func (a *App) Run(invokeFunc func(bind ...interface{})) {
 	utils.Logger.Info("[App] Run...")
-	err := a.diContainer.Invoke(func(echo *api.EchoApi) {
-		invokeFunc(echo)
+	err := a.diContainer.Invoke(func(echo *api.EchoApi, healthCheckApi *api.HealthCheckApi) {
+		invokeFunc(echo, healthCheckApi)
 	})
 
 	if err != nil {

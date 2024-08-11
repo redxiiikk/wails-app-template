@@ -4,11 +4,10 @@ import (
 	"errors"
 	"os"
 	"path"
+	"path/filepath"
 
 	"gopkg.in/yaml.v3"
 )
-
-var CurrentEnv Env = DevEnv
 
 type Env string
 
@@ -17,29 +16,76 @@ const (
 	ProdEnv Env = "prod"
 )
 
+var CurrentEnv = DevEnv
+
 type ApplicationConfig struct {
-	Env Env
+	AppName string `yaml:"-"`
+	Env     Env    `yaml:"-"`
+	DataDir string `yaml:"-"`
 }
 
 func NewApplicationConfig(appName string) func() (ApplicationConfig, error) {
 	return func() (ApplicationConfig, error) {
-		applicationConfig, err := parseApplicationConfig(appName)
+		dataDir, err := applicationDataDir(appName)
 		if err != nil {
-			return applicationConfig, err
+			return ApplicationConfig{}, err
 		}
 
+		//applicationConfig, err := parseApplicationConfig(dataDir)
+		//if err != nil {
+		//	return applicationConfig, err
+		//}
+
+		applicationConfig := ApplicationConfig{}
+		applicationConfig.AppName = appName
 		applicationConfig.Env = CurrentEnv
+		applicationConfig.DataDir = dataDir
 
 		return applicationConfig, nil
 	}
 }
 
-func parseApplicationConfig(appName string) (ApplicationConfig, error) {
+func applicationDataDir(appName string) (string, error) {
+	userConfigDir, err := os.UserConfigDir()
+
+	if err != nil {
+		return "", errors.New("can't open user config dir")
+	}
+
+	var dataDir string
+
+	switch CurrentEnv {
+	case DevEnv:
+		dataDir = path.Join(userConfigDir, appName+"-dev")
+	case ProdEnv:
+		dataDir = path.Join(userConfigDir, appName)
+	default:
+		return "", errors.New("didn't known env: env=" + string(CurrentEnv))
+	}
+
+	f, err := os.Stat(dataDir)
+	if os.IsNotExist(err) {
+		err = os.MkdirAll(dataDir, 0755)
+		if err != nil {
+			return "", err
+		}
+	} else {
+		if !f.IsDir() {
+			return "", errors.New("dataDir is not directory")
+		}
+	}
+
+	return dataDir, nil
+}
+
+func parseApplicationConfig(dataDir string) (ApplicationConfig, error) {
 	result := ApplicationConfig{}
 
-	applicationConfigPath, err := applicationConfigFilePath(appName)
-	if err != nil {
-		return result, err
+	applicationConfigPath := filepath.Join(dataDir, "config.yaml")
+
+	_, err := os.Stat(applicationConfigPath)
+	if os.IsNotExist(err) {
+		return ApplicationConfig{}, nil
 	}
 
 	content, err := os.ReadFile(applicationConfigPath)
@@ -53,25 +99,4 @@ func parseApplicationConfig(appName string) (ApplicationConfig, error) {
 	}
 
 	return result, nil
-}
-
-func applicationConfigFilePath(appName string) (string, error) {
-	userConfigDir, err := os.UserConfigDir()
-
-	if err != nil {
-		return "", errors.New("can't open user config dir")
-	}
-
-	applicationConfigPath := ""
-
-	switch CurrentEnv {
-	case DevEnv:
-		applicationConfigPath = path.Join(userConfigDir, appName+"-dev", "config.yaml")
-	case ProdEnv:
-		applicationConfigPath = path.Join(userConfigDir, appName, "config.yaml")
-	default:
-		return "", errors.New("didn't known env: env=" + string(CurrentEnv))
-	}
-
-	return applicationConfigPath, nil
 }

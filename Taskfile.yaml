@@ -9,4 +9,4 @@ tasks:
   dev:
     - task: frontend:generate
     - task: frontend:build
-    - wails dev -skipbindings -s -noreload
+    - wails dev -skipbindings -s -noreload -v=2

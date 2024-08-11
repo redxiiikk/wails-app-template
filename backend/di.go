@@ -3,6 +3,7 @@ package backend
 import (
 	"github.com/redxiiikk/wails-app-template/backend/api"
 	"github.com/redxiiikk/wails-app-template/backend/config"
+	"github.com/redxiiikk/wails-app-template/backend/infra/database"
 	"go.uber.org/dig"
 )
 
@@ -39,9 +40,19 @@ func registerApi(container *dig.Container) error {
 		return err
 	}
 
+	err = container.Provide(api.NewHealthCheckApi)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func registerInfra(_ *dig.Container) error {
+func registerInfra(container *dig.Container) error {
+	err := container.Provide(database.NewDatabaseClient)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
