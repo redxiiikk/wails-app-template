@@ -24,11 +24,11 @@ type ApplicationConfig struct {
 	DataDir string `yaml:"-"`
 }
 
-func NewApplicationConfig(appName string) func() (ApplicationConfig, error) {
-	return func() (ApplicationConfig, error) {
+func NewApplicationConfig(appName string) func() (*ApplicationConfig, error) {
+	return func() (*ApplicationConfig, error) {
 		dataDir, err := applicationDataDir(appName)
 		if err != nil {
-			return ApplicationConfig{}, err
+			return &ApplicationConfig{}, err
 		}
 
 		//applicationConfig, err := parseApplicationConfig(dataDir)
@@ -41,7 +41,7 @@ func NewApplicationConfig(appName string) func() (ApplicationConfig, error) {
 		applicationConfig.Env = CurrentEnv
 		applicationConfig.DataDir = dataDir
 
-		return applicationConfig, nil
+		return &applicationConfig, nil
 	}
 }
 

@@ -14,11 +14,12 @@ import (
 var schema embed.FS
 
 //goland:noinspection GoNameStartsWithPackageName
-type DatabaseClient struct {
+type SqliteClient struct {
 	client *gorm.DB
 }
 
-func NewDatabaseClient(config *config.ApplicationConfig) (*DatabaseClient, error) {
+func NewDatabaseClient(config *config.ApplicationConfig) (*SqliteClient, error) {
+	utils.Logger.Info("[Database] create new database client")
 	databaseFilePath := filepath.Join(config.DataDir, "sqlite3.db")
 
 	utils.Logger.Info("[Database] register sqlite", zap.String("databaseFilePath", databaseFilePath))
@@ -32,12 +33,13 @@ func NewDatabaseClient(config *config.ApplicationConfig) (*DatabaseClient, error
 		return nil, err
 	}
 
-	return &DatabaseClient{
+	return &SqliteClient{
 		client: db,
 	}, err
 }
 
 func initDatabase(db *gorm.DB) error {
+	utils.Logger.Info("[Database] init database schema")
 	bytes, err := schema.ReadFile("schema.sql")
 	if err != nil {
 		return err
@@ -53,7 +55,7 @@ func initDatabase(db *gorm.DB) error {
 	return nil
 }
 
-func (database *DatabaseClient) HealthCheck() (string, error) {
+func (database *SqliteClient) HealthCheck() (string, error) {
 	tx := database.client.Exec("SELECT 1")
 	if tx.Error != nil {
 		return "DOWN", tx.Error

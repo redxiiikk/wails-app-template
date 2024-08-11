@@ -4,6 +4,7 @@ import (
 	"github.com/redxiiikk/wails-app-template/backend/api"
 	"github.com/redxiiikk/wails-app-template/backend/config"
 	"github.com/redxiiikk/wails-app-template/backend/infra/database"
+	"github.com/redxiiikk/wails-app-template/backend/utils"
 	"go.uber.org/dig"
 )
 
@@ -12,8 +13,8 @@ func NewDIContainer(appName string) (*dig.Container, error) {
 
 	registerFuncs := []func(*dig.Container) error{
 		registerConfig(appName),
-		registerApi,
 		registerInfra,
+		registerApi,
 	}
 
 	for _, fun := range registerFuncs {
@@ -28,6 +29,7 @@ func NewDIContainer(appName string) (*dig.Container, error) {
 
 func registerConfig(appName string) func(container *dig.Container) error {
 	return func(container *dig.Container) error {
+		utils.Logger.Info("[DI] register config")
 		return container.Provide(
 			config.NewApplicationConfig(appName),
 		)
@@ -35,6 +37,7 @@ func registerConfig(appName string) func(container *dig.Container) error {
 }
 
 func registerApi(container *dig.Container) error {
+	utils.Logger.Info("[DI] register api")
 	err := container.Provide(api.NewEchoApi)
 	if err != nil {
 		return err
@@ -49,6 +52,7 @@ func registerApi(container *dig.Container) error {
 }
 
 func registerInfra(container *dig.Container) error {
+	utils.Logger.Info("[DI] register infra")
 	err := container.Provide(database.NewDatabaseClient)
 	if err != nil {
 		return err

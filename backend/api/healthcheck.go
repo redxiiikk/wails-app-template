@@ -1,9 +1,12 @@
 package api
 
-import "github.com/redxiiikk/wails-app-template/backend/infra/database"
+import (
+	"github.com/redxiiikk/wails-app-template/backend/infra/database"
+	"github.com/redxiiikk/wails-app-template/backend/utils"
+)
 
 type HealthCheckApi struct {
-	databaseClient *database.DatabaseClient
+	databaseClient *database.SqliteClient
 }
 
 type HealthCheckResponse struct {
@@ -16,7 +19,8 @@ type HealthCheckItem struct {
 	ErrorMessage string `json:"errorMessage"`
 }
 
-func NewHealthCheckApi(databaseClient *database.DatabaseClient) *HealthCheckApi {
+func NewHealthCheckApi(databaseClient *database.SqliteClient) *HealthCheckApi {
+	utils.Logger.Info("[API] create new health check api instance")
 	return &HealthCheckApi{
 		databaseClient: databaseClient,
 	}
