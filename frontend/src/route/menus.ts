@@ -32,6 +32,12 @@ export default [
         icon: 'pi pi-cog',
         component: () => import('../pages/profile/index.vue'),
       },
+      {
+        name: 'Health',
+        path: '/healthcheck',
+        icon: 'pi pi-server',
+        component: () => import('../pages/healthcheck/index.vue'),
+      },
     ],
   },
 ] as Array<Menus>;
