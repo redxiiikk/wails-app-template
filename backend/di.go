@@ -6,11 +6,11 @@ import (
 	"go.uber.org/dig"
 )
 
-func NewDIContainer() (*dig.Container, error) {
+func NewDIContainer(appName string) (*dig.Container, error) {
 	container := dig.New()
 
 	registerFuncs := []func(*dig.Container) error{
-		registerConfig,
+		registerConfig(appName),
 		registerApi,
 		registerInfra,
 	}
@@ -25,10 +25,12 @@ func NewDIContainer() (*dig.Container, error) {
 	return container, nil
 }
 
-func registerConfig(container *dig.Container) error {
-	return container.Provide(
-		config.NewApplicationConfig,
-	)
+func registerConfig(appName string) func(container *dig.Container) error {
+	return func(container *dig.Container) error {
+		return container.Provide(
+			config.NewApplicationConfig(appName),
+		)
+	}
 }
 
 func registerApi(container *dig.Container) error {

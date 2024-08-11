@@ -21,21 +21,23 @@ type ApplicationConfig struct {
 	Env Env
 }
 
-func NewApplicationConfig(appName string) (ApplicationConfig, error) {
-	applicationConfig, err := parseApplicationConfig()
-	if err != nil {
-		return applicationConfig, err
+func NewApplicationConfig(appName string) func() (ApplicationConfig, error) {
+	return func() (ApplicationConfig, error) {
+		applicationConfig, err := parseApplicationConfig(appName)
+		if err != nil {
+			return applicationConfig, err
+		}
+
+		applicationConfig.Env = CurrentEnv
+
+		return applicationConfig, nil
 	}
-
-	applicationConfig.Env = CurrentEnv
-
-	return applicationConfig, nil
 }
 
-func parseApplicationConfig() (ApplicationConfig, error) {
+func parseApplicationConfig(appName string) (ApplicationConfig, error) {
 	result := ApplicationConfig{}
 
-	applicationConfigPath, err := applicationConfigFilePath()
+	applicationConfigPath, err := applicationConfigFilePath(appName)
 	if err != nil {
 		return result, err
 	}
@@ -53,7 +55,7 @@ func parseApplicationConfig() (ApplicationConfig, error) {
 	return result, nil
 }
 
-func applicationConfigFilePath() (string, error) {
+func applicationConfigFilePath(appName string) (string, error) {
 	userConfigDir, err := os.UserConfigDir()
 
 	if err != nil {
@@ -64,9 +66,9 @@ func applicationConfigFilePath() (string, error) {
 
 	switch CurrentEnv {
 	case DevEnv:
-		applicationConfigPath = path.Join(userConfigDir, "wails-app-template-dev", "config.yaml")
+		applicationConfigPath = path.Join(userConfigDir, appName+"-dev", "config.yaml")
 	case ProdEnv:
-		applicationConfigPath = path.Join(userConfigDir, "wails-app-template", "config.yaml")
+		applicationConfigPath = path.Join(userConfigDir, appName, "config.yaml")
 	default:
 		return "", errors.New("didn't known env: env=" + string(CurrentEnv))
 	}

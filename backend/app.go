@@ -12,13 +12,15 @@ type App struct {
 }
 
 func NewApp() (*App, error) {
-	fxApp, err := NewDIContainer()
+	appName := "wails-app-template"
+
+	fxApp, err := NewDIContainer(appName)
 	if err != nil {
 		return nil, err
 	}
 
 	return &App{
-		Name:        "wails-app-template",
+		Name:        appName,
 		diContainer: fxApp,
 	}, nil
 }
