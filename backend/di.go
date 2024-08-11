@@ -4,6 +4,7 @@ import (
 	"github.com/redxiiikk/wails-app-template/backend/api"
 	"github.com/redxiiikk/wails-app-template/backend/config"
 	"github.com/redxiiikk/wails-app-template/backend/infra/database"
+	"github.com/redxiiikk/wails-app-template/backend/service"
 	"github.com/redxiiikk/wails-app-template/backend/utils"
 	"go.uber.org/dig"
 )
@@ -15,6 +16,7 @@ func NewDIContainer(appName string) (*dig.Container, error) {
 		registerConfig(appName),
 		registerInfra,
 		registerApi,
+		registerService,
 	}
 
 	for _, fun := range registerFuncs {
@@ -44,6 +46,21 @@ func registerApi(container *dig.Container) error {
 	}
 
 	err = container.Provide(api.NewHealthCheckApi)
+	if err != nil {
+		return err
+	}
+
+	err = container.Provide(api.NewMigrateHistoryApi)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func registerService(container *dig.Container) error {
+	utils.Logger.Info("[DI] register service")
+	err := container.Provide(service.NewMigrateService)
 	if err != nil {
 		return err
 	}

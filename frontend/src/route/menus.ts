@@ -38,6 +38,12 @@ export default [
         icon: 'pi pi-server',
         component: () => import('../pages/healthcheck/index.vue'),
       },
+      {
+        name: 'Migrate History',
+        path: '/migrate-history',
+        icon: 'pi pi-server',
+        component: () => import('../pages/migrate/index.vue'),
+      },
     ],
   },
 ] as Array<Menus>;

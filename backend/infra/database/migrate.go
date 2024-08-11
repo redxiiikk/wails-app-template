@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"github.com/redxiiikk/wails-app-template/backend/entity"
 	"github.com/redxiiikk/wails-app-template/backend/utils"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -101,4 +102,25 @@ func hasMigrateHistory(db *gorm.DB, key, hashCode string) (bool, error) {
 	}
 
 	return count != 0, nil
+}
+
+func (database *SqliteClient) QueryMigrateHistory() ([]entity.MigrateHistory, error) {
+	var migrateHistory []MigrateHistory
+	tx := database.client.Model(&MigrateHistory{}).Find(&migrateHistory)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	migrateHistoryEntity := make([]entity.MigrateHistory, len(migrateHistory))
+	for i, history := range migrateHistory {
+		migrateHistoryEntity[i] = entity.MigrateHistory{
+			ID:        history.ID,
+			Key:       history.Key,
+			Hash:      history.Hash,
+			CreatedAt: history.CreatedAt,
+			UpdatedAt: history.UpdatedAt,
+		}
+	}
+
+	return migrateHistoryEntity, nil
 }

@@ -26,10 +26,15 @@ func NewApp() (*App, error) {
 }
 
 func (a *App) Run(invokeFunc func(bind ...interface{})) {
+
 	utils.Logger.Info("[App] Run...")
-	err := a.diContainer.Invoke(func(echo *api.EchoApi, healthCheckApi *api.HealthCheckApi) {
+	err := a.diContainer.Invoke(func(
+		echo *api.EchoApi,
+		healthCheckApi *api.HealthCheckApi,
+		migrateHistoryApi *api.MigrateHistoryApi,
+	) {
 		utils.Logger.Info("[App] Invoke...")
-		invokeFunc(echo, healthCheckApi)
+		invokeFunc(echo, healthCheckApi, migrateHistoryApi)
 	})
 
 	if err != nil {
