@@ -31,12 +31,11 @@ func NewApplicationConfig(appName string) func() (*ApplicationConfig, error) {
 			return &ApplicationConfig{}, err
 		}
 
-		//applicationConfig, err := parseApplicationConfig(dataDir)
-		//if err != nil {
-		//	return applicationConfig, err
-		//}
+		applicationConfig, err := parseApplicationConfig(dataDir)
+		if err != nil {
+			return &applicationConfig, err
+		}
 
-		applicationConfig := ApplicationConfig{}
 		applicationConfig.AppName = appName
 		applicationConfig.Env = CurrentEnv
 		applicationConfig.DataDir = dataDir
