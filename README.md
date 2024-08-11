@@ -23,8 +23,7 @@ This is a template for creating a new Wails application, and integrate some usef
 ## Roadmap
 
 - [x] support vue route.
-- [ ] support nested route.
-- [ ] support breadcrumb.
+- [x] support nested route.
 - [ ] support sqlite3 database.
 - [ ] integrate GitHub Actions to test and release.
 - [ ] improve documentation.
