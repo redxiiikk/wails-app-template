@@ -24,7 +24,8 @@ This is a template for creating a new Wails application, and integrate some usef
 
 - [x] support vue route.
 - [x] support nested route.
-- [ ] support sqlite3 database.
+- [x] support sqlite3 database.
 - [ ] integrate GitHub Actions to test and release.
 - [ ] improve documentation.
+- [ ] improve test converge.
 - [ ] template variables and use GitHub template feature.
