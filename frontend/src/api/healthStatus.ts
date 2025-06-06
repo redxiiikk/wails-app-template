@@ -6,7 +6,7 @@ export interface HealthStatus {
   message: string;
 }
 
-export default async function healthcheckApi(): Promise<HealthStatus[]> {
+export default async function healthCheckApi(): Promise<HealthStatus[]> {
   const response = await HealthCheck();
 
   return response.items.map((item) => ({

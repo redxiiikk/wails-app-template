@@ -5,7 +5,9 @@ tasks:
   frontend:generate: wails generate module
   frontend:build:
     dir: frontend
-    cmd: yarn build
+    cmds:
+      - test -d dist || mkdir -p dist
+      - yarn build
   dev:
     - task: frontend:generate
     - task: frontend:build
