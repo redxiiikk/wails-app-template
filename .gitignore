@@ -1,6 +1,7 @@
 ### Wails ###
 build
 .idea/
+frontend/src/wailsjs
 
 # Created by https://www.toptal.com/developers/gitignore/api/go,vue,node,linux,macos,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=go,vue,node,linux,macos,windows,visualstudiocode
