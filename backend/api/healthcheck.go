@@ -14,10 +14,17 @@ type HealthCheckResponse struct {
 }
 
 type HealthCheckItem struct {
-	Name         string `json:"name"`
-	Status       string `json:"status"`
-	ErrorMessage string `json:"errorMessage"`
+	Name         string            `json:"name"`
+	Status       HealthCheckStatus `json:"status"`
+	ErrorMessage string            `json:"errorMessage"`
 }
+
+type HealthCheckStatus string
+
+const (
+	HealthCheckStatusUP   HealthCheckStatus = "UP"
+	HealthCheckStatusDOWN HealthCheckStatus = "DOWN"
+)
 
 func NewHealthCheckApi(databaseClient *database.SqliteClient) *HealthCheckApi {
 	utils.Logger.Info("[API] create new health check api instance")
@@ -31,12 +38,13 @@ func (api *HealthCheckApi) HealthCheck() HealthCheckResponse {
 
 	return HealthCheckResponse{
 		Items: []HealthCheckItem{
-			convertToHealthCheckItem("database", databaseStatus, err),
+			convertToHealthCheckItem("backend", HealthCheckStatus(databaseStatus), err),
+			convertToHealthCheckItem("database", HealthCheckStatusUP, err),
 		},
 	}
 }
 
-func convertToHealthCheckItem(name, status string, err error) HealthCheckItem {
+func convertToHealthCheckItem(name string, status HealthCheckStatus, err error) HealthCheckItem {
 	databaseHealthCheck := HealthCheckItem{
 		Name:   name,
 		Status: status,
