@@ -2,12 +2,17 @@ version: 3
 silent: true
 tasks:
   default: task --list-all
-  frontend:generate: wails generate module
+  frontend:generate:
+    env:
+      GENERATE_FRONTEND_MODEL: true
+    cmds:
+      - test -d frontend/dist || mkdir -p frontend/dist
+      - '[ "$(ls -A frontend/dist)" ] || touch frontend/dist/.empty' 
+      - wails generate module
   frontend:build:
     dir: frontend
-    cmds:
-      - test -d dist || mkdir -p dist
-      - yarn build
+    cmd: yarn build
+
   dev:
     - task: frontend:generate
     - task: frontend:build

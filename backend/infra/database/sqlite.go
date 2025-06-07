@@ -4,13 +4,14 @@ import (
 	"crypto/sha256"
 	"embed"
 	"encoding/hex"
+	"path/filepath"
+
 	"github.com/glebarez/sqlite"
 	"github.com/redxiiikk/wails-app-template/backend/config"
 	"github.com/redxiiikk/wails-app-template/backend/utils"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"path/filepath"
 )
 
 //go:embed all:sql
@@ -22,6 +23,11 @@ type SqliteClient struct {
 }
 
 func NewDatabaseClient(config *config.ApplicationConfig) (*SqliteClient, error) {
+	if config.IsGenerateFrontendModel() {
+		utils.Logger.Warn("[Database] skip create database client for generate frontend model")
+		return &SqliteClient{}, nil
+	}
+
 	utils.Logger.Info("[Database] create new database client")
 	databaseFilePath := filepath.Join(config.DataDir, "sqlite3.db")
 

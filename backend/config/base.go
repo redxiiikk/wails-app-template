@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -98,4 +99,8 @@ func parseApplicationConfig(dataDir string) (ApplicationConfig, error) {
 	}
 
 	return result, nil
+}
+
+func (config *ApplicationConfig) IsGenerateFrontendModel() bool {
+	return strings.ToLower(os.Getenv("GENERATE_FRONTEND_MODEL")) == "true"
 }
