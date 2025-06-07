@@ -1,8 +1,6 @@
 module github.com/redxiiikk/wails-app-template
 
-go 1.23.0
-
-toolchain go1.23.6
+go 1.23.6
 
 require (
 	github.com/glebarez/sqlite v1.11.0
