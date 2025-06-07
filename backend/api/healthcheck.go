@@ -6,7 +6,7 @@ import (
 )
 
 type HealthCheckApi struct {
-	databaseClient *database.SqliteClient
+	databaseClient *database.DatabaseClient
 }
 
 type HealthCheckResponse struct {
@@ -26,7 +26,7 @@ const (
 	HealthCheckStatusDOWN HealthCheckStatus = "DOWN"
 )
 
-func NewHealthCheckApi(databaseClient *database.SqliteClient) *HealthCheckApi {
+func NewHealthCheckApi(databaseClient *database.DatabaseClient) *HealthCheckApi {
 	utils.Logger.Info("[API] create new health check api instance")
 	return &HealthCheckApi{
 		databaseClient: databaseClient,

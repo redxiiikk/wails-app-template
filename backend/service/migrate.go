@@ -6,10 +6,10 @@ import (
 )
 
 type MigrateService struct {
-	databaseClient *database.SqliteClient
+	databaseClient *database.DatabaseClient
 }
 
-func NewMigrateService(databaseClient *database.SqliteClient) *MigrateService {
+func NewMigrateService(databaseClient *database.DatabaseClient) *MigrateService {
 	return &MigrateService{
 		databaseClient: databaseClient,
 	}

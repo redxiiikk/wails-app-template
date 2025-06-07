@@ -18,17 +18,17 @@ import (
 var sqlScriptDir embed.FS
 
 //goland:noinspection GoNameStartsWithPackageName
-type SqliteClient struct {
-	client *gorm.DB
+type DatabaseClient struct {
+	connection *gorm.DB
 }
 
-func NewDatabaseClient(config *config.ApplicationConfig) (*SqliteClient, error) {
+func NewDatabaseClient(config *config.ApplicationConfig) (*DatabaseClient, error) {
 	if config.IsGenerateFrontendModel() {
-		utils.Logger.Warn("[Database] skip create database client for generate frontend model")
-		return &SqliteClient{}, nil
+		utils.Logger.Warn("[Database] skip create database connection for generate frontend model")
+		return &DatabaseClient{}, nil
 	}
 
-	utils.Logger.Info("[Database] create new database client")
+	utils.Logger.Info("[Database] create new database connection")
 	databaseFilePath := filepath.Join(config.DataDir, "sqlite3.db")
 
 	utils.Logger.Info("[Database] register sqlite", zap.String("databaseFilePath", databaseFilePath))
@@ -39,18 +39,13 @@ func NewDatabaseClient(config *config.ApplicationConfig) (*SqliteClient, error) 
 		return nil, err
 	}
 
-	err = startMigrate(db)
-	if err != nil {
-		return nil, err
-	}
-
-	return &SqliteClient{
-		client: db,
+	return &DatabaseClient{
+		connection: db,
 	}, err
 }
 
-func (database *SqliteClient) HealthCheck() (string, error) {
-	tx := database.client.Exec("SELECT 1")
+func (database *DatabaseClient) HealthCheck() (string, error) {
+	tx := database.connection.Exec("SELECT 1")
 	if tx.Error != nil {
 		return "DOWN", tx.Error
 	}

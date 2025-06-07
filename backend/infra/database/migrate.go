@@ -18,12 +18,12 @@ type MigrateHistory struct {
 	Hash string
 }
 
-func startMigrate(db *gorm.DB) error {
-	err := createMigrateTable(db)
+func (database *DatabaseClient) StartMigrate() error {
+	err := createMigrateTable(database.connection)
 	if err != nil {
 		return err
 	}
-	err = migrate(db)
+	err = migrate(database.connection)
 	if err != nil {
 		return err
 	}
@@ -104,9 +104,9 @@ func hasMigrateHistory(db *gorm.DB, key, hashCode string) (bool, error) {
 	return count != 0, nil
 }
 
-func (database *SqliteClient) QueryMigrateHistory() ([]entity.MigrateHistory, error) {
+func (database *DatabaseClient) QueryMigrateHistory() ([]entity.MigrateHistory, error) {
 	var migrateHistory []MigrateHistory
-	tx := database.client.Model(&MigrateHistory{}).Find(&migrateHistory)
+	tx := database.connection.Model(&MigrateHistory{}).Find(&migrateHistory)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"github.com/redxiiikk/wails-app-template/backend"
 	"github.com/redxiiikk/wails-app-template/backend/utils"
@@ -29,6 +30,10 @@ func wailsRun(app *backend.App) func(bind ...interface{}) {
 			Fullscreen: true,
 			AssetServer: &assetserver.Options{
 				Assets: assets,
+			},
+			OnStartup: func(ctx context.Context) {
+				app.SetContext(ctx)
+				app.PublishEvent(backend.ApplicationStarted, nil)
 			},
 			Bind: bind,
 		})
